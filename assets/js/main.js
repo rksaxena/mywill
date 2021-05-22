@@ -1,114 +1,83 @@
+/*
+	Spectral by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
 (function($) {
-  
-  "use strict";  
 
-  $(window).on('load', function() {
+	var	$window = $(window),
+		$body = $('body'),
+		$wrapper = $('#page-wrapper'),
+		$banner = $('#banner'),
+		$header = $('#header');
 
-  /*Page Loader active
-  ========================================================*/
-  $('#preloader').fadeOut();
+	// Breakpoints.
+		breakpoints({
+			xlarge:   [ '1281px',  '1680px' ],
+			large:    [ '981px',   '1280px' ],
+			medium:   [ '737px',   '980px'  ],
+			small:    [ '481px',   '736px'  ],
+			xsmall:   [ null,      '480px'  ]
+		});
 
-  // Sticky Nav
-    $(window).on('scroll', function() {
-        if ($(window).scrollTop() > 50) {
-            $('.scrolling-navbar').addClass('top-nav-collapse');
-        } else {
-            $('.scrolling-navbar').removeClass('top-nav-collapse');
-        }
-    });
+	// Play initial animations on page load.
+		$window.on('load', function() {
+			window.setTimeout(function() {
+				$body.removeClass('is-preload');
+			}, 100);
+		});
 
-    // one page navigation 
-    $('.navbar-nav').onePageNav({
-      currentClass: 'active'
-    });
+	// Mobile?
+		if (browser.mobile)
+			$body.addClass('is-mobile');
+		else {
 
-    /* Auto Close Responsive Navbar on Click
-    ========================================================*/
-    function close_toggle() {
-        if ($(window).width() <= 768) {
-            $('.navbar-collapse a').on('click', function () {
-                $('.navbar-collapse').collapse('hide');
-            });
-        }
-        else {
-            $('.navbar .navbar-inverse a').off('click');
-        }
-    }
-    close_toggle();
-    $(window).resize(close_toggle);
+			breakpoints.on('>medium', function() {
+				$body.removeClass('is-mobile');
+			});
 
-    /* WOW Scroll Spy
-    ========================================================*/
-     var wow = new WOW({
-      //disabled for mobile
-        mobile: false
-    });
+			breakpoints.on('<=medium', function() {
+				$body.addClass('is-mobile');
+			});
 
-    wow.init();
+		}
 
-    /* 
-    CounterUp
-    ========================================================================== */
-    $('.counter').counterUp({
-      time: 500
-    });  
-    
+	// Scrolly.
+		$('.scrolly')
+			.scrolly({
+				speed: 1500,
+				offset: $header.outerHeight()
+			});
 
-     /* Testimonials Carousel 
-    ========================================================*/
-    var owl = $("#testimonials");
-      owl.owlCarousel({
-        loop: true,
-        nav: false,
-        dots: true,
-        center: true,
-        margin: 15,
-        slideSpeed: 1000,
-        stopOnHover: true,
-        autoPlay: true,
-        responsiveClass: true,
-        responsiveRefreshRate: true,
-        responsive : {
-            0 : {
-                items: 1
-            },
-            768 : {
-                items: 2
-            },
-            960 : {
-                items: 3
-            },
-            1200 : {
-                items: 3
-            },
-            1920 : {
-                items: 3
-            }
-        }
-      });  
-      
+	// Menu.
+		$('#menu')
+			.append('<a href="#menu" class="close"></a>')
+			.appendTo($body)
+			.panel({
+				delay: 500,
+				hideOnClick: true,
+				hideOnSwipe: true,
+				resetScroll: true,
+				resetForms: true,
+				side: 'right',
+				target: $body,
+				visibleClass: 'is-menu-visible'
+			});
 
+	// Header.
+		if ($banner.length > 0
+		&&	$header.hasClass('alt')) {
 
-    /* Back Top Link active
-    ========================================================*/
-      var offset = 200;
-      var duration = 500;
-      $(window).scroll(function() {
-        if ($(this).scrollTop() > offset) {
-          $('.back-to-top').fadeIn(400);
-        } else {
-          $('.back-to-top').fadeOut(400);
-        }
-      });
+			$window.on('resize', function() { $window.trigger('scroll'); });
 
-      $('.back-to-top').on('click',function(event) {
-        event.preventDefault();
-        $('html, body').animate({
-          scrollTop: 0
-        }, 600);
-        return false;
-      });
+			$banner.scrollex({
+				bottom:		$header.outerHeight() + 1,
+				terminate:	function() { $header.removeClass('alt'); },
+				enter:		function() { $header.addClass('alt'); },
+				leave:		function() { $header.removeClass('alt'); }
+			});
 
-  });      
+		}
 
-}(jQuery));
+})(jQuery);
