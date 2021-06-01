@@ -276,6 +276,14 @@ input, select, textarea {
 			overflow-x: auto;
 		}
 
+    .lang {
+        letter-spacing: 0em;
+        text-transform: unset;
+        border-width: 0.2rem;
+        border-style: double;
+    }
+
+
 	.align-left {
 		text-align: left;
 	}
